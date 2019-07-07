@@ -1,0 +1,13 @@
+# do not call ansible from packer as it takes ages
+# gen ssh-key for root / copy auth key from source host - packer
+# to gen key on target host without prompt do : ssh-keygen -f /root/.ssh/id_rsa -t -N ""
+# .rbenv/bin and .rbenv/shims in /home/nath
+
+# need to build vm with a host-only network
+# need to get IP address :
+# set PACKER_LOG=1
+# set PACKER_LOG_FILE=packer_log.txt
+# packer build centos.json
+
+# need to get the above working, so can pull in IP address, or need to hardcode ?
+# install rails using ansible

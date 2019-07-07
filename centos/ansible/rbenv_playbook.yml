@@ -1,0 +1,24 @@
+---
+- hosts: 192.168.56.109
+  tasks:
+    - name: install rbenv
+      get_url:
+        url: https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer
+        dest: /tmp/rbenv-installer
+        mode: 0755
+    - name: run rbenv installer
+      command: bash -lc "/tmp/rbenv-installer"
+      become: true
+      become_user: nath
+    - name: install ruby 2.5.1
+      command: bash -lc "rbenv install 2.5.1"
+      become: true
+      become_user: nath
+    - name: use ruby
+      command: bash -lc "rbenv local 2.5.1"
+      become true
+      become_user: nath
+    - name: install rails latest
+      command: bash -lc "gem install rails"
+      become: true
+      become_user: nath

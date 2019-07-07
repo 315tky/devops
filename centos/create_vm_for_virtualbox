@@ -1,0 +1,4 @@
+/opt/packer/bin/packer build -force centos_virtualbox.json
+vboxmanage import output-virtualbox-iso/CentOS7-004.ovf
+# start up vm, "ip addr" to get host-only network IP, then update /etc/ansible/hosts and the playbook.yml with this IP, then run playbook :
+ansible-playbook ruby_251_rails_latest_playbook.yml

@@ -1,0 +1,9 @@
+---
+- hosts: centos_7
+  tasks:
+    - name: motd
+      template: src=example-motd
+                dest=/etc/motd
+                owner=root
+                group=root
+                mode=0644

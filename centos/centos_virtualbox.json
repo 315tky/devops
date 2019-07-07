@@ -1,0 +1,62 @@
+{
+  "variables": {
+    "iso": "file:////home/nath/Packer/ISOs/CentOS-7-x86_64-DVD-1804.iso",
+    "checksum": "506e4e06abf778c3435b4e5745df13e79ebfc86565d7ea1e128067ef6b5a6345"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "iso_url": "{{ user `iso` }}",
+      "iso_checksum": "{{ user `checksum` }}",
+      "iso_checksum_type": "sha256",
+      "vm_name": "react_play",
+      "guest_os_type": "RedHat_64",
+      "ssh_username": "root",
+      "ssh_password": "packer",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "600s",
+      "vboxmanage": [
+        ["modifyvm", "{{.Name}}", "--memory", "2048"],
+        ["modifyvm", "{{.Name}}", "--cpus", "2"],
+        ["modifyvm", "{{.Name}}", "--audio", "none"],
+        ["modifyvm", "{{.Name}}", "--nic1", "nat"],
+        ["modifyvm", "{{.Name}}", "--nictype1", "virtio"],
+        ["modifyvm", "{{.Name}}", "--nic2", "hostonly"],
+        ["modifyvm", "{{.Name}}", "--nictype2", "virtio"],
+        ["modifyvm", "{{.Name}}", "--hostonlyadapter2", "vboxnet0"]
+        
+      ],
+      "disk_size": "20480",
+      "http_directory": "/home/nath/Packer/centos/",
+      "boot_command": [
+        "<up><wait><tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+      ],
+      "shutdown_command": "/sbin/halt -p"
+    }
+  ],
+   "provisioners": [
+     {
+       "type": "shell",
+       "inline": [
+         "ssh-keygen -f /root/.ssh/id_rsa -t rsa -N \"\"",
+         "yum -y install gcc",
+         "yum -y install gcc-c++",
+         "yum -y install git",
+         "yum -y install openssl-devel readline-devel zlib-devel",
+         "yum -y install bzip2",
+         "yum -y install sqlite-devel",
+         "yum -y update"
+       ]
+     },
+     { 
+       "type": "file",
+       "source": "source_files/authorized_keys",
+       "destination": "/root/.ssh/authorized_keys"
+     },
+     {
+       "type": "file",
+       "source": "source_files/bash_profile",
+       "destination": "/home/nath/.bash_profile"
+     }
+  ]
+}

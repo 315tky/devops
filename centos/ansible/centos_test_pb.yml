@@ -1,0 +1,9 @@
+---
+- hosts: 192.168.56.101
+  tasks:
+    - name: motd
+      template: src=example-motd
+                dest=/etc/motd
+                owner=root
+                group=root
+                mode=0644
